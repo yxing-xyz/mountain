@@ -6,6 +6,10 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/shirou/gopsutil/disk"
+	"google.golang.org/appengine/log"
 )
 
 /*
@@ -58,4 +62,22 @@ func IP2Long(ipv4 string) (uint32, error) {
 		ip |= partOfIp << (8 * k)
 	}
 	return uint32(ip), nil
+}
+
+// 检查是否是容器内部
+func InContainer() (bool, error) {
+	pstats, err := disk.Partitions(true)
+	if err != nil {
+		log.Errorf("get disk info failed: %s", err.Error())
+		return false, errors.Wrap(err, "get disk info failed")
+	}
+	for _, value := range pstats {
+		fmt.Println(value)
+		if value.Mountpoint == "/" && strings.EqualFold("overlay", value.Fstype) {
+			return true, nil
+		}
+	}
+
+	return false, nil
+
 }
