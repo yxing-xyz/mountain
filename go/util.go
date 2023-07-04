@@ -70,7 +70,6 @@ func InContainer() (bool, error) {
 		return false, errors.Wrap(err, "get disk info failed")
 	}
 	for _, value := range pstats {
-		fmt.Println(value)
 		if value.Mountpoint == "/" && strings.EqualFold("overlay", value.Fstype) {
 			return true, nil
 		}

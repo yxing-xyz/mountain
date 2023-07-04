@@ -8,6 +8,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/vishvananda/netlink v1.1.0
 	golang.org/x/net v0.10.0
+	golang.org/x/sync v0.3.0
 )
 
 require (
