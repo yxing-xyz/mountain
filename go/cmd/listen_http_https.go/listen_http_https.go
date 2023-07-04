@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -35,7 +34,7 @@ func init() {
 func proxyStart(listenport, httpport, httpsport int) {
 	proxylistener, err := net.Listen("tcp", fmt.Sprintf(":%d", listenport))
 	if err != nil {
-		fmt.Println("Unable to listen on: %d, error: %s\n", listenport, err.Error())
+		fmt.Printf("Unable to listen on: %d, error: %s\n", listenport, err.Error())
 		os.Exit(1)
 	}
 	defer proxylistener.Close()
@@ -65,12 +64,12 @@ func proxyStart(listenport, httpport, httpsport int) {
 
 		targetconn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", targetport))
 		if err != nil {
-			fmt.Println("Unable to connect to: %d, error: %s\n", targetport, err.Error())
+			fmt.Printf("Unable to connect to: %d, error: %s\n", targetport, err.Error())
 			proxyconn.Close()
 			continue
 		}
 
-		n, err = targetconn.Write(buffer[:n])
+		_, err = targetconn.Write(buffer[:n])
 		if err != nil {
 			fmt.Printf("Unable to write to output, error: %s\n", err.Error())
 			proxyconn.Close()
@@ -96,7 +95,7 @@ func proxyRequest(r net.Conn, w net.Conn) {
 			break
 		}
 
-		n, err = w.Write(buffer[:n])
+		_, err = w.Write(buffer[:n])
 		if err != nil {
 			fmt.Printf("Unable to write to output, error: %s\n", err.Error())
 			break
@@ -117,7 +116,7 @@ func isHTTPRequest(buffer []byte) bool {
 func startHTTPSServer(address string, router *mux.Router, caroots string, keyfile string, signcert string) {
 	pool := x509.NewCertPool()
 
-	caCrt, err := ioutil.ReadFile(caroots)
+	caCrt, err := os.ReadFile(caroots)
 	if err != nil {
 		log.Fatalln("ReadFile err:", err)
 	}

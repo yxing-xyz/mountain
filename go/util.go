@@ -9,7 +9,6 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/shirou/gopsutil/disk"
-	"google.golang.org/appengine/log"
 )
 
 /*
@@ -68,7 +67,6 @@ func IP2Long(ipv4 string) (uint32, error) {
 func InContainer() (bool, error) {
 	pstats, err := disk.Partitions(true)
 	if err != nil {
-		log.Errorf("get disk info failed: %s", err.Error())
 		return false, errors.Wrap(err, "get disk info failed")
 	}
 	for _, value := range pstats {

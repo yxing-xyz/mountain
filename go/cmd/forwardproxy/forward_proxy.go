@@ -2,17 +2,11 @@ package main
 
 import (
 	"bytes"
-
 	"fmt"
-
 	"io"
-
 	"log"
-
 	"net"
-
 	"net/url"
-
 	"strings"
 )
 
