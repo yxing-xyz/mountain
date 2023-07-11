@@ -104,7 +104,7 @@ func proxyRequest(r net.Conn, w net.Conn) {
 }
 
 func isHTTPRequest(buffer []byte) bool {
-	httpMethod := []string{"GET", "PUT", "HEAD", "POST", "DELETE", "PATCH", "OPTIONS"}
+	httpMethod := []string{"GET", "PUT", "HEAD", "POST", "DELETE", "PATCH", "OPTIONS", "CONNECT", "TRACE"}
 	for cnt := 0; cnt < len(httpMethod); cnt++ {
 		if bytes.HasPrefix(buffer, []byte(httpMethod[cnt])) {
 			return true
